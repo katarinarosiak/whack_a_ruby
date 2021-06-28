@@ -5,8 +5,6 @@ class Ruby {
     this.y = 200;
     this.width = 100;
     this.height = 100;
-    // this.dy = 4;
-    // this.dx = 4;
     this.element = document.getElementById('ruby');
   }
   draw(ctx) {
@@ -20,8 +18,8 @@ class Ruby {
     return Math.floor(Math.random() * until);
   }
   teleport() {
-    this.x = this.randomNum(800)
-    this.y = this.randomNum(800)
+    this.x = this.randomNum(750)
+    this.y = this.randomNum(750)
   }
 }
 
@@ -35,7 +33,6 @@ class Hammer {
     this.element = document.getElementById('hammer');
   }
   react(event) {
-    console.log('tutaj')
     if (event.key === 'ArrowUp') {
       this.moveUp();
     } else if (event.key === 'ArrowDown') {
@@ -71,18 +68,19 @@ class Game {
     this.ruby = new Ruby();
     this.canvas = document.getElementById("gameScreen");
     this.ctx = gameScreen.getContext('2d');
+    document.addEventListener("keydown", (event) => { this.hammer.react(event) });
   }
   update() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
     this.drawScore();
     this.ruby.draw(this.ctx);
-    let newFunc = this.hammer.react.bind(this.hammer);
-    document.addEventListener("keydown", newFunc);
+    let hammer = this.hammer;
     this.hammer.draw(this.ctx);
 
     if (this.isCollision(this.hammer, this.ruby)) {
       this.score++;
       this.ruby.teleport();
+      console.log('Boooooom!');
     }
     requestAnimationFrame(() => { this.update() });
   }
